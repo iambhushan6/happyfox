@@ -218,7 +218,7 @@ def main():
         print("Building the email Databse")
         print("")
         print("-"*98)
-        for count in tqdm(range(500)):
+        for count in tqdm(range(20)):
           GetMessage(service, user_id, all_email_ids[count],count)
           # time.sleep(1)
         #   sys.stdout.write("-")
