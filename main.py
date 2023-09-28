@@ -1,20 +1,16 @@
 from __future__ import print_function
 import pickle
-import requests
+
 import os.path
-import base64
-import email
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from apiclient import errors
 import re
 import database
-import time
 import sys
 from tqdm import tqdm
 from dateutil.parser import parse 
-
 
 
 # If modifying these scopes, delete the file token.pickle.
@@ -47,24 +43,19 @@ def ListMessagesWithLabels(service, user_id, label_ids=[]):
     appropriate id to get the details of a Message.
   """
   try:
-    response = service.users().messages().list(userId=user_id,
-                                               labelIds=label_ids).execute()
+    response = service.users().messages().list(userId=user_id,labelIds=label_ids).execute()
     messages = []
     if 'messages' in response:
       messages.extend(response['messages'])
 
     while 'nextPageToken' in response:
       page_token = response['nextPageToken']
-      response = service.users().messages().list(userId=user_id,
-                                                 labelIds=label_ids,
-                                                 pageToken=page_token).execute()
+      response = service.users().messages().list(userId=user_id,labelIds=label_ids,pageToken=page_token).execute()
       messages.extend(response['messages'])
 
     return [i["id"] for i in messages]
   except errors.HttpError as error:
     print ('An error occurred: ' , error)
-
-
 
 
 def GmailCredential():
@@ -102,18 +93,11 @@ def GmailCredential():
         print('No labels found.')
         status=False
 
-    
     user_id='me'
     label_ids =["INBOX"]
     
     return service,user_id,label_ids,status
 
-"""Get Message with given ID.
-"""
-
-# import base64
-# import email
-# from apiclient import errors
 
 def GetMessage(service, user_id, msg_id,count):
   """Get a Message with given ID.
@@ -139,29 +123,14 @@ def GetMessage(service, user_id, msg_id,count):
                       row_info.append(parse(i["value"]))
                 else:
                       row_info.append(i["value"])
-    # row_info[1]=parse(row_info[1])  
-    # print(row_info[1])
-    # message = service.users().messages().get(userId=user_id, id=msg_id,
-    #                                          format='raw').execute()
-
-    # msg_str = base64.urlsafe_b64decode(message['raw'].encode('ASCII'))
-
-    # html_body = email.message_from_string(msg_str.decode('utf-8'))
-    # text = RemoveTags(str(html_body))
-    # # print(text)
-    # row_info.extend((text,count))
 
     row_info.extend((msg_id,count))
 
     database.insert_data(tuple(row_info))
-    # print(message)
     return message
 
   except errors.HttpError as error:
     print ('An error occurred: %s' % error)
-
-
-
 
 
 def ModifyMessage(service, user_id, msg_id, msg_labels):
@@ -178,8 +147,7 @@ def ModifyMessage(service, user_id, msg_id, msg_labels):
     Modified message, containing updated labelIds, id and threadId.
   """
   try:
-    message = service.users().messages().modify(userId=user_id, id=msg_id,
-                                                body=msg_labels).execute()
+    message = service.users().messages().modify(userId=user_id, id=msg_id,body=msg_labels).execute()
     
     label_ids = message['labelIds']
 

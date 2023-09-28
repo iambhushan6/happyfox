@@ -5,7 +5,7 @@
         {
             "Field_name":"From",
             "Predicate":"contains",
-            "Value":"karthick",
+            "Value":"bhushan",
             "Action":"SPAM"
         },
         {

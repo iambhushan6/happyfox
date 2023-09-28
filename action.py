@@ -1,19 +1,7 @@
 import json
-import pickle
-import os.path
-import base64
-import email
-import re
 import database
-import time
-import sys
-
 import database
 import main
-
-
-
-
 
 
 with open('./rule.json') as json_file:
@@ -23,15 +11,13 @@ with open('./rule.json') as json_file:
 conditions=data["Conditions"]
 
 string_predicate={
-                 "contains":"LIKE",
-                 "not contains":"NOT LIKE",
-                 "equal":"=",
-                 "not equal":"!=",
-                 "Less than":"<=",
-                 "Greater than":">="
-                 }
-
-
+        "contains":"LIKE",
+        "not contains":"NOT LIKE",
+        "equal":"=",
+        "not equal":"!=",
+        "Less than":"<=",
+        "Greater than":">="
+    }
 
 
 def take_action(action,mail_ids):
@@ -43,12 +29,8 @@ def take_action(action,mail_ids):
     return True
 
 
-
-
-
-
 for i in conditions:
-    # print(i)
+
     field_name = i["Field_name"]
     predicate = i["Predicate"]
     value = i["Value"]
@@ -64,8 +46,6 @@ for i in conditions:
 
             operator = string_predicate[predicate]
             mail_data=database.date_query(operator,value)
-            
-            
 
         mail_ids=[i[-1] for i in mail_data]
         print(len(mail_ids))
