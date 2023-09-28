@@ -1,0 +1,20 @@
+{
+    "All_or_Any":"all",
+    
+    "Conditions":[
+        {
+            "Field_name":"From",
+            "Predicate":"contains",
+            "Value":"karthick",
+            "Action":"SPAM"
+        },
+        {
+            "Field_name":"Date",
+            "Predicate":"Greater than",
+            "Value":"5 day",
+            "Action":"INBOX"
+        }
+    ]
+
+
+}
