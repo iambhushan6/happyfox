@@ -14,7 +14,7 @@ from dateutil.parser import parse
 
 
 # If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+SCOPES = ['https://www.googleapis.com/auth/gmail.readonly', 'https://www.googleapis.com/auth/gmail.modify']
 TAG_RE = re.compile(r'<[^>]+>')
 toolbar_width = 40
 
@@ -59,10 +59,10 @@ def ListMessagesWithLabels(service, user_id, label_ids=[]):
 
 
 def GmailCredential():
-    """Shows basic usage of the Gmail API.
+    """
+    Shows basic usage of the Gmail API.
     Lists the user's Gmail labels.
     """
-    message=""
     status=True
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -115,16 +115,20 @@ def GetMessage(service, user_id, msg_id,count):
   try:
     message = service.users().messages().get(userId=user_id, id=msg_id).execute()
     row_info=[]
-    for i in message['payload']['headers']:
-          if i["name"] in label_tags:
-                # print(i["name"]," ",i["value"])
-                
-                if i["name"] == "Date":
-                      row_info.append(parse(i["value"]))
-                else:
-                      row_info.append(i["value"])
 
-    row_info.extend((msg_id,count))
+    for i in message['payload']['headers']:
+          
+          if i["name"] in label_tags:
+            if i["name"] == "Date":
+                  Date = parse(i["value"])
+            elif i["name"] == "From":
+                From = i["value"]
+            elif i["name"] == "Subject":
+                Subject = i["value"]
+            elif i["name"] == "To":
+                To = i["value"]
+
+    row_info.extend((From, Date, Subject, To, msg_id,count))
 
     database.insert_data(tuple(row_info))
     return message
@@ -147,7 +151,7 @@ def ModifyMessage(service, user_id, msg_id, msg_labels):
     Modified message, containing updated labelIds, id and threadId.
   """
   try:
-    message = service.users().messages().modify(userId=user_id, id=msg_id,body=msg_labels).execute()
+    message = service.users().messages().modify(userId=user_id, id=msg_id,body={"addLabelIds": msg_labels}).execute()
     
     label_ids = message['labelIds']
 
@@ -166,20 +170,10 @@ def CreateMsgLabels():
   return {'removeLabelIds': [], 'addLabelIds': ['UNREAD', 'INBOX', 'Label_2']}
 
 
-
-
-
-
-
-
-
-
-
 def main():
     service,user_id,label_ids,status=GmailCredential()
     if status:
         all_email_ids=ListMessagesWithLabels(service,user_id,label_ids)
-        msg_id=all_email_ids[0]
         database.drop_table()
         database.create_table()
 
@@ -188,14 +182,10 @@ def main():
         print("-"*98)
         for count in tqdm(range(20)):
           GetMessage(service, user_id, all_email_ids[count],count)
-          # time.sleep(1)
-        #   sys.stdout.write("-")
-        #   sys.stdout.flush()
-        # sys.stdout.write("]\n") # this ends the progress ba
 
         print("-"*98)
         print("")
-        print("Latest 100 emails has been feteched from GMAIL !!!!!")
+        print("Latest 20 emails has been feteched from GMAIL !!!!!")
 
 
 

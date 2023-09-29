@@ -5,16 +5,14 @@
         {
             "Field_name":"From",
             "Predicate":"contains",
-            "Value":"bhushan",
-            "Action":"SPAM"
+            "Value":"WakaTime <noreply@wakatime.com>",
+            "Action":"TRASH"
         },
         {
-            "Field_name":"Date",
-            "Predicate":"Greater than",
-            "Value":"5 day",
-            "Action":"INBOX"
+            "Field_name":"Subject",
+            "Predicate":"contains",
+            "Value":"Welcome to intervue.io developer",
+            "Action":"IMPORTANT"
         }
     ]
-
-
 }

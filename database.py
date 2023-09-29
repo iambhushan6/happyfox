@@ -45,9 +45,11 @@ def create_table():
 
 
 def select_data(field_name,operator,value):
+
     query = "SELECT * FROM `mail` WHERE `{0}` {1} {2}".format(field_name,operator,value)
     cursor.execute(query)
     rows = cursor.fetchall()
+
     return rows
 
 

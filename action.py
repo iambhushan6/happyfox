@@ -22,9 +22,9 @@ string_predicate={
 
 def take_action(action,mail_ids):
     service,user_id,label_ids,status=main.GmailCredential()
-    msg_labels="Test"
+    msg_labels= [action]   # choose any between STARRED, IMPORTANT ,UNREAD, SPAM, TRASH
     for msg_id in mail_ids:
-        main.ModifyMessage(service, user_id,msg_id,  msg_labels)
+        main.ModifyMessage(service=service, user_id=user_id, msg_id=msg_id,  msg_labels=msg_labels)
         
     return True
 
