@@ -6,13 +6,13 @@
             "Field_name":"From",
             "Predicate":"contains",
             "Value":"WakaTime <noreply@wakatime.com>",
-            "Action":"TRASH"
+            "Action":"STARRED"
         },
         {
             "Field_name":"Subject",
             "Predicate":"contains",
             "Value":"Welcome to intervue.io developer",
-            "Action":"IMPORTANT"
+            "Action":"STARRED"
         }
     ]
 }
