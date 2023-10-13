@@ -1,5 +1,5 @@
 {
-    "All_or_Any":"all",
+    "All_or_Any":"any",
     
     "Conditions":[
         {
@@ -11,7 +11,7 @@
         {
             "Field_name":"Subject",
             "Predicate":"contains",
-            "Value":"Welcome to intervue.io developer",
+            "Value":"Wellfound",
             "Action":"STARRED"
         }
     ]
